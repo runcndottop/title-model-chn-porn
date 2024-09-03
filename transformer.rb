@@ -1,9 +1,10 @@
 require 'matrix'
 
 class Transformer
-	N = 6
-	D = 512
-	D_FF = 2048
+	N = 6	# number of encoder blocks
+	D = 512	# word embedding dimension
+	D_FF = 2048	# feed forward dimension
+	H = 8	# number of heads for multihead attention
 
 	@embedding	# used as both input, and output pre-softmax linear transformation
 
@@ -16,6 +17,20 @@ class Transformer
 	end
 
 	def multihead_attention
+	end
+
+	def softmax(m)	# m is a matrix
+		# compute softmax for each entry along the row
+		m.row_vectors.collect {|r|
+			dtr = 0
+			r.each {|e|
+				dtr += Math.exp(e)
+			}
+
+			r.collect {|e|
+				Math.exp(e)/dtr
+			}
+		}
 	end
 
 	def forward(batch)
@@ -34,7 +49,7 @@ class Transformer
 				Math.sin((i%@seq_len)/10000**(j/D))
 			end
 		}
-		p embedded
+		p softmax(Matrix[[1,2,3], [0,0,0]])
 	end
 end
 
