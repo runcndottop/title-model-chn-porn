@@ -21,7 +21,7 @@ class Transformer
 
 	def softmax(m)	# m is a matrix
 		# compute softmax for each entry along the row
-		m.row_vectors.collect {|r|
+		Matrix.rows(m.row_vectors.collect {|r|
 			dtr = 0
 			r.each {|e|
 				dtr += Math.exp(e)
@@ -30,7 +30,7 @@ class Transformer
 			r.collect {|e|
 				Math.exp(e)/dtr
 			}
-		}
+		})
 	end
 
 	def forward(batch)
